@@ -28,7 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 #设置登录初始路径
-LOGIN_URL = '/view/'
+LOGIN_URL = '/welcome/'
 
 #设置登录session有效时间
 SESSION_COOKIE_AGE = 60*360

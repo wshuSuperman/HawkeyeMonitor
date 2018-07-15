@@ -12,7 +12,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     ###view###
-    path('view/', views.login, name="login"),
+    path('welcome/', views.login, name="login"),
     ###user###
     path('user/', views.dashboard, name="dashboard"),
     path('user/master', views.master, name="master"),
