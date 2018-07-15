@@ -27,6 +27,14 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+#设置登录初始路径
+LOGIN_URL = '/view/'
+
+#设置登录session有效时间
+SESSION_COOKIE_AGE = 60*360
+#设置session关闭浏览器失效
+SESSION_EXPIRE_AT_BROWSER_CLOSE  = True
+
 
 # Application definition
 
@@ -37,7 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'AssetManage',
+    'RBAC',
 ]
 
 MIDDLEWARE = [
@@ -52,10 +60,13 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'HawkEyeProbe.urls'
 
+#配置静态文件路径
+TEMPLATE_PATH = os.path.join(BASE_DIR, 'templates')
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [TEMPLATE_PATH],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
