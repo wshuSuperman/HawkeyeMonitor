@@ -43,6 +43,14 @@ SESSION_COOKIE_AGE = 60*360
 SESSION_EXPIRE_AT_BROWSER_CLOSE  = True
 
 
+# 定义session 键：
+# 保存用户权限url列表
+# 保存 权限菜单 和所有 菜单
+SESSION_PERMISSION_URL_KEY = 'spuk'
+SESSION_MENU_KEY = 'smk'
+ALL_MENU_KEY = 'amk'
+PERMISSION_MENU_KEY = 'pmk'
+
 # Application definition
 
 INSTALLED_APPS = [
