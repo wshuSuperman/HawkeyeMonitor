@@ -25,14 +25,21 @@ SECRET_KEY = 'n248!m-$1+xdgin0^926ispy(_$a@4*w^%p_c0@(&6t8_b7=j*'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+REGEX_URL = '{url}'  # url作严格匹配
+# 白名单
+SAFE_URL =[
+            '/welcome/',
+            '/user/',
+            ]
+
 
 #设置登录初始路径
 LOGIN_URL = '/welcome/'
 
-#设置登录session有效时间
+# 设置登录session有效时间
 SESSION_COOKIE_AGE = 60*360
-#设置session关闭浏览器失效
+# 设置session关闭浏览器失效
 SESSION_EXPIRE_AT_BROWSER_CLOSE  = True
 
 
@@ -56,6 +63,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'RBAC.middleware.rbac.RbacMiddleware',
 ]
 
 ROOT_URLCONF = 'HawkEyeProbe.urls'
