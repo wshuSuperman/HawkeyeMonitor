@@ -3,6 +3,8 @@
 # @Time : 2018/7/15 14:59
 # @Auther : Wshu
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404
+
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -242,3 +244,109 @@ def changepwd(request):
     else:
         form = forms.ChangPasswdForm()
     return render(request, 'formedit.html', {'form': form, 'post_url': changepwd})
+
+### 用户列表
+@login_required
+@csrf_protect
+def userlist(request):
+    user = request.user
+    error = ''
+    if user.is_superuser:
+        area = models.Area.objects.filter(parent__isnull=True)
+        city = models.Area.objects.filter(parent__isnull=False)
+        return render(request, 'RBAC/userlist.html', {'area': area, 'city': city})
+    else:
+        error = '权限错误'
+    return render(request, 'error.html', {'error':error})
+
+### 用户提交注册处理
+@login_required
+@csrf_protect
+def userregistaction(request):
+    user = request.user
+    error = ''
+    if user.is_superuser():
+        regist_id = request.POST.get('request_id')
+        action = request.POST.get('action')
+        userregist = get_object_or_404(models.UserRequest, id=regist_id)
+        if userregist.is_check:
+            error = '请勿重复审批'
+        else:
+            if action == 'access':
+                userregist.is_check = True
+                userregist.status = '1'
+                res = mails.sendregistmail(userregist.email, userregist.urlarg)
+                if res:
+                    error = '添加成功，已向该员工发送邮件'
+                else:
+                    error = '添加成功，邮件发送失败，请重试'
+                userregist.save()
+            else:
+                if action == 'deny':
+                    userregist.is_check = True
+                    userregist.status = '2'
+                    userregist.is_use = True
+                    userregist.save()
+                    error = '已审批'
+                else:
+                    error = '未指定操作'
+    else:
+        error = '权限错误'
+    return JsonResponse({'error': error})
+
+### 注册用户列表
+@login_required
+def userregistlist(request):
+    user = request.user
+    error = ''
+    if user.is_superuser:
+        area = models.Area.objects.filter(parent__isnull=True)
+        return render(request, 'RBAC/userregistlist.html', {'area': area})
+    else:
+        error = '权限错误'
+    return render(request, 'error.html', {'error': error})
+
+
+### 添加用户
+@login_required
+@csrf_protect
+def user_add(request):
+    user = request.user
+    errpr = ''
+    if user.is_superuser:
+        if request.method == 'POST':
+            form = forms.RegistForm(request.POST)
+            if form.is_valid():
+                email = form.cleaned_data['email']
+                user_get = User.objects.filter(username=email)
+                if user_get:
+                    error = '用户已存在'
+                else:
+                    userregist_get = models.UserRequest.objects.filter(email=email)
+                    if userregist_get.count() > 2:
+                        error = '用户已多次添加'
+                    else:
+                        area = form.cleaned_data['area']
+                        request_type = form.cleaned_data['request_type']
+                        urlarg = strtopsd(email)
+                        models.UserRequest.objects.get_or_create(
+                            email=email,
+                            urlarg=urlarg,
+                            area=area,
+                            request_type=request_type,
+                            is_check=True,
+                            status='1',
+                            action_user=user
+                        )
+                        res = mails.sendregistmail(email, urlarg)
+                        if res:
+                            error = '添加成功，已向该员工发送邮件'
+                        else:
+                            error = '添加成功，邮件发送失败，请重试'
+            else:
+                error = '请检查输入'
+        else:
+            form = forms.RegistForm()
+    else:
+        error = '请检查权限是否正确'
+    return render(request, 'formedit.html', {'form': form, 'error': error})

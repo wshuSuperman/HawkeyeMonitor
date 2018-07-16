@@ -11,7 +11,7 @@ from django.forms import widgets
 
 
 
-
+# 登录表单
 class SigninForm(forms.Form):
     username = forms.CharField(label='账号', max_length=80, widget=forms.TextInput(attrs={'class':'layui-input','placeholder':'用户名'}))
     password = forms.CharField(label='密码',max_length=25,widget=forms.PasswordInput(attrs={'class':'layui-input','placeholder':'密码'}))
@@ -27,6 +27,8 @@ class RegistForm(ModelForm):
             'request_type': widgets.Select(attrs={'class': 'layui-input', 'placeholder': '账号类型'})
         }
 
+
+# 账户重置表单
 class Account_Reset_Form(forms.Form):
     firstname = forms.CharField(label='姓',max_length=75,widget=forms.TextInput(attrs={'class':'layui-input','placeholder':'姓'}))
     lastname = forms.CharField(label='名',max_length=75,widget=forms.TextInput(attrs={'class':'layui-input','placeholder':'名'}))
@@ -35,14 +37,18 @@ class Account_Reset_Form(forms.Form):
     repassword = forms.CharField(label='重复密码',max_length=25,widget=forms.PasswordInput(attrs={'class':'layui-input','placeholder':'重复密码'}))
 
 
+# 重置密码表单
 class ResetpsdRequestForm(forms.Form):
     email = forms.CharField(label='邮箱', max_length=25,widget=forms.TextInput(attrs={'class': 'layui-input', 'placeholder': '邮箱地址'}))
 
+# 重置密码表单
 class ResetpsdForm(forms.Form):
     email = forms.CharField(label='邮箱', max_length=25, widget=forms.TextInput(attrs={'class': 'layui-input', 'placeholder': '邮箱地址'}))
     password = forms.CharField(label='新密码', max_length=25, widget=forms.PasswordInput(attrs={'class': 'layui-input', 'placeholder': '新密码'}))
     repassword = forms.CharField(label='新密码', max_length=25, widget=forms.PasswordInput(attrs={'class': 'layui-input', 'placeholder': '新密码'}))
 
+
+# 更改密码表单
 class ChangPasswdForm(forms.Form):
     old_password = forms.CharField(label='原密码', max_length=25,widget=forms.PasswordInput(attrs={'class': 'layui-input', 'placeholder': '原密码'}))
     new_password = forms.CharField(label='新密码', max_length=25,widget=forms.PasswordInput(attrs={'class': 'layui-input', 'placeholder': '新密码'}))

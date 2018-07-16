@@ -20,4 +20,10 @@ urlpatterns = [
     path('user/index', views.index, name="index"),
     path('user/logout', views.logout, name="logout"),
     path('user/changepwd', views.changepwd, name="changepwd"),
+    ###manage###
+    path('manage/user/', views.userlist, name="userview"),
+    path('manage/user/add/', views.user_add, name="useradd"),
+
+    path('manage/userrequest/', views.userregistlist, name="userregistview"),
+    path('manage/userrequest/action/', views.userregistaction, name="userregistaction"),
 ]
