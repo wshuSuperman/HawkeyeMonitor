@@ -16,12 +16,13 @@ import datetime, hashlib
 
 
 ### 仪表盘
-# @login_required
+@login_required
 def dashboard(request):
     return render(request, 'Dashboard.html')
 
 
 ### 首页
+@login_required
 def index(request):
     return render(request, 'RBAC/index.html')
 
@@ -207,5 +208,37 @@ def logout(request):
 
 
 ### 更改密码
+@login_required
+@csrf_protect
 def changepwd(request):
-    pass
+    error = ''
+    if request.method == 'POST':
+        form = forms.ChangPasswdForm(request.POST)
+        if form.is_valid():
+            old_password = form.cleaned_data['old_password']
+            new_password = form.cleaned_data['new_password']
+            re_new_password = form.cleaned_data['re_new_password']
+            username = request.user.username
+            if checkpsd(new_password):
+                if new_password and new_password == re_new_password:
+                    if old_password:
+                        user = auth.authenticate(username=username, password=old_password)
+                        if user:
+                            user.set_password(new_password)
+                            user.save()
+                            auth.logout(request)
+                            error = '修改成功'
+                        else:
+                            error = '账号信息错误'
+                    else:
+                        error = '请检查原始密码'
+                else:
+                    error = '两次密码不一致'
+            else:
+                error = '密码必须6位以上且包含字母、数字'
+        else:
+            error = '请检查输入'
+        return render(request, 'formedit.html', {'form': form, 'post_url': changepwd, 'error':error})
+    else:
+        form = forms.ChangPasswdForm()
+    return render(request, 'formedit.html', {'form': form, 'post_url': changepwd})
