@@ -206,3 +206,6 @@ def logout(request):
 
 
 
+### 更改密码
+def changepwd(request):
+    pass
