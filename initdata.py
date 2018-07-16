@@ -76,10 +76,10 @@ def initarea():
     django.setup()
     from RBAC.models import Area
     area_list =[
-        {'name':'华北'},
-        {'name':'华南'},
-        {'name':'华东'},
-        {'name':'华中'},
+        {'name': '华北'},
+        {'name': '华南'},
+        {'name': '华东'},
+        {'name': '华中'},
         ]
     for item in area_list:
         Area.objects.get_or_create(name=item['name'])
