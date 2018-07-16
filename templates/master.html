@@ -23,6 +23,12 @@
 </head>
 
 <body>
+    {% if error %}
+        <div class="alert alert-warning alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <strong>温馨提示!</strong> {{ error }}
+        </div>
+    {% endif %}
     {% block master %}
     {% endblock %}
 
