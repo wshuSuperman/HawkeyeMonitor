@@ -28,4 +28,4 @@
       ·针对中小型企业内部资产管理
 
 ===================未完待续,其他功能,敬请期待=====================
-![HawkeyeMonitor](https://github.com/wangshu2016/HawkeyeMonitor/PROIMG/hawkeye.png)
+![HawkeyeMonitor](https://github.com/wangshu2016/HawkeyeMonitor/blob/master/PROIMG/hawkeye.png)
