@@ -11,10 +11,12 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
-    ###view###
+    ###welcome###
     path('welcome/', views.login, name="login"),
+    path('welcome/regist/<str:argu>/', views.regist, name="regist"),
+    path('welcome/resetpsd/<str:argu>/', views.resetpasswd, name="resetpsds"),
     ###user###
     path('user/', views.dashboard, name="dashboard"),
-    path('user/master', views.master, name="master"),
+    path('user/index', views.index, name="index"),
     path('user/logout', views.logout, name="logout"),
 ]

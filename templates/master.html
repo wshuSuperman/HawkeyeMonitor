@@ -18,10 +18,12 @@
     <script type="text/javascript" src="{% static 'js/jquery/jquery-3.3.1.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'lib/layui/layui.js' %}" charset="utf-8"></script>
     <script type="text/javascript" src="{% static 'js/xadmin.js' %}"></script>
+    {% block head %}
+    {% endblock %}
 </head>
 
 <body>
-    {% block index %}
+    {% block master %}
     {% endblock %}
 
 
