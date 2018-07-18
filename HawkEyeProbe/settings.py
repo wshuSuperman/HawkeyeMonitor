@@ -31,7 +31,7 @@ REGEX_URL = r'^{url}$'  # url作严格匹配
 SAFE_URL =[
     r'/welcome/',
     '/user/',
-    '/admin/',
+    '/hawkeye/',
 ]
 # 设置网站根地址
 WEB_URL = 'http://localhost:8000'
