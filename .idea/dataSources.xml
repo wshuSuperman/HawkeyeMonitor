@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="HawkEye@localhost" uuid="4de72930-58f8-4468-8709-eb66a6d9813d">
+    <data-source source="LOCAL" name="HawkEye" uuid="3ac482f6-1cca-4f3d-8ec3-f9ec11d757c2">
       <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>

@@ -2,6 +2,8 @@
 # -*-coding:utf-8 -*-
 # @Time : 2018/7/15 14:59
 # @Auther : Wshu
+
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
