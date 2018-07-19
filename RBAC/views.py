@@ -16,7 +16,6 @@ from django.contrib import auth
 from . import forms, models
 import datetime, hashlib
 
-
 ### 仪表盘
 @login_required
 def dashboard(request):
@@ -47,6 +46,7 @@ def login(request):
                         user.profile.error_count = 0
                         user.save()
                         auth.login(request, user)
+                        # 初始化权限
                         return HttpResponseRedirect('/user/')
                     else:
                         user_get.profile.error_cout += 1
