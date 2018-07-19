@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*-coding:utf-8 -*-
 # @Time : 2018/7/15 14:59
-# @Auther : Wshu
+# @Auther : Wsh
+
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404
 
 from django.http import JsonResponse
@@ -11,9 +12,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from SysconfManage.views import strtopsd
 from SysconfManage.SmallFun import checkpsd, mails
+from . import forms, models
 import django.utils.timezone as timezone
 from django.contrib import auth
-from . import forms, models
 import datetime, hashlib
 
 ### 仪表盘
@@ -56,7 +57,7 @@ def login(request):
                         user_get.save()
                         error = '登陆失败,已错误登录'+str(user_get.profile.error_count) +'次,5次后账号锁定',
             else:
-                error = error = '请检查用户信息'
+                error = '请检查用户信息'
         else:
             error = u'请检查输入'
         return render(request,'RBAC/login.html',{'form':form,'error':error})
