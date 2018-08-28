@@ -11,7 +11,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from SysconfManage.views import strtopsd
-from SysconfManage.SmallFun import checkpsd, mails
+from SysconfManage.SmallFun.checkpsd import checkpsd
+from SysconfManage.SmallFun import mails
 from . import forms, models
 import django.utils.timezone as timezone
 from django.contrib import auth
@@ -201,7 +202,7 @@ def resetpasswd(request, argu='resetpsd'):
 
 
 
-### 退出
+### 退出用户
 @login_required
 def logout(request):
     auth.logout(request)

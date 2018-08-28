@@ -3,7 +3,6 @@
 # @Time : 2018/7/15 22:23
 # @Auther : Wshu
 
-
 from django.conf import settings
 from django.shortcuts import HttpResponse, redirect, render, HttpResponseRedirect
 import re
@@ -88,4 +87,4 @@ class RbacMiddleware(MiddlewareMixin):
                 info ='<br/>' + ( '<br/>'.join(permission_url))
                 return HttpResponse('无权限，请尝试访问以下地址：%s' % info)
             else:
-                return HttpResponse('无法访问')
+                return HttpResponse('无权限访问')

@@ -10,8 +10,10 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 import django.utils.timezone as timezone
 
-# 设置菜单
 class Menu(models.Model):
+    """
+        菜单表
+    """
     title = models.CharField(u'菜单标题', max_length=25, unique=True)
     icon = models.CharField(u'菜单图标', max_length=50)
     parent = models.ForeignKey('self', verbose_name=u'父菜单', related_name='menu_menu', null=True, blank=True, on_delete=models.CASCADE)
@@ -27,6 +29,9 @@ class Menu(models.Model):
 
 # 设置访问链接
 class Permission(models.Model):
+    """
+        权限表
+    """
     title = models.CharField(u'权限标题', max_length=50, unique=True)
     is_menu = models.BooleanField('菜单显示', default=False)
     url = models.CharField(max_length=128)
@@ -36,19 +41,15 @@ class Permission(models.Model):
         return '{menu}--{permission}'.format(menu=self.menu, permission=self.title)
 
 
-# 设置角色和权限
 class Role(models.Model):
+    """
+        角色表
+    """
     title = models.CharField(u'角色名称', max_length=25, unique=True)
     permissions = models.ManyToManyField(Permission, verbose_name=u'权限菜单', related_name='role_permission')
 
     def __str__(self):
         return self.title
-
-REQUEST_STATUS=(
-    ('0', '待审批'),
-    ('1', '审批通过'),
-    ('2', '审批拒绝'),
-    )
 
 
 class Area(models.Model):
@@ -63,7 +64,11 @@ class Area(models.Model):
             p = p.parent
         return '-'.join(title_list)
 
-
+REQUEST_STATUS=(
+    ('0', '待审批'),
+    ('1', '审批通过'),
+    ('2', '审批拒绝'),
+    )
 # 注册有审批时使用
 class UserRequest(models.Model):
     email = models.EmailField('申请邮箱')
@@ -99,7 +104,6 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     user_num = models.CharField(u'员工编号', max_length=50, null=True, blank=True)
     title = models.CharField(u'职位名称', max_length=50)
-
     telephone = models.CharField(u'座机号码', max_length=50, null=True, blank=True)
     mobilephone = models.CharField(u'手机号码', max_length=50)
     description = models.TextField(u'用户简介')

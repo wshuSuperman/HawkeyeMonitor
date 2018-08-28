@@ -16,6 +16,7 @@ def get_structure_data(request):
     all_menu = menu[settings.ALL_MENU_KEY]
     permission_url = menu[settings.PERMISSION_MENU_KEY]
 
+    #定制数据结构
     all_menu_dict = {}
     for item in all_menu:
         item['children'] = []
