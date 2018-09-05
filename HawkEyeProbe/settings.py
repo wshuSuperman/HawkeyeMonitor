@@ -58,13 +58,13 @@ PERMISSION_MENU_KEY = 'pmk'
 #设置邮箱
 EMAIL_HOST = 'smtp.163.com'          #SMTP地址
 EMAIL_PORT = 25                 #SMTP端口
-EMAIL_HOST_USER = 'wangshuchn@163.com'    #我自己的邮箱
-EMAIL_HOST_PASSWORD = 'wshu!@#456'         #我的邮箱密码
+EMAIL_HOST_USER = ''    #你自己的邮箱
+EMAIL_HOST_PASSWORD = ''         #你的邮箱密码
 EMAIL_SUBJECT_PREFIX = u'[HawkEye]'      #为邮件Subject-line前缀,默认是'[django]'
 EMAIL_USE_TLS = True               #与SMTP服务器通信时，是否启动TLS链接(安全链接)。默认是false
 #管理员站点
 SERVER_EMAIL = 'xxxxx'
-DEFAULT_FROM_EMAIL = '鹰眼监控平台<wangshuchn@163.com>'
+DEFAULT_FROM_EMAIL = 'HawkEye监控平台<wangshuchn@163.com>'
 
 #设置队列存储
 BROKER_URL = 'amqp://user:psd@xx.xx.xx.xx/vhost'    #设置与rabbitmq一致
