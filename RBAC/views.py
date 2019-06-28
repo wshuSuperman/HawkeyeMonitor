@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*-coding:utf-8 -*-
 # @Time : 2018/7/15 14:59
-# @Auther : Wsh
+# @Auther : Wshu
 
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404
 
@@ -73,7 +73,7 @@ def login(request):
 ### 用户注册
 @csrf_protect
 def regist(request, argu):
-    error = ""
+    error = ''
     if argu == 'regist':
         if request.method == "POST":
             form = forms.RegistForm(request.POST)
@@ -314,7 +314,7 @@ def userregistlist(request):
 @csrf_protect
 def user_add(request):
     user = request.user
-    errpr = ''
+    error = ''
     if user.is_superuser:
         if request.method == 'POST':
             form = forms.RegistForm(request.POST)
@@ -352,3 +352,4 @@ def user_add(request):
     else:
         error = '请检查权限是否正确'
     return render(request, 'formedit.html', {'form': form, 'error': error})
+
