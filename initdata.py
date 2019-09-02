@@ -14,6 +14,8 @@ def initment():
                 {'title': '资产管理', 'icon': "&#xe653;"},
                 {'title': '网络映射', 'icon': "&#xe674;"},
                 {'title': '漏洞管理', 'icon': "&#xe663;"},
+                {'title': '微信监控', 'icon': "&#xe677;"},
+                {'title': '微博监控', 'icon': "&#xe675;"},
                 {'title': '任务管理', 'icon': "&#xe628;"},
                 {'title': '报表中心', 'icon': "&#xe629;"},
                 {'title': '用户管理', 'icon': "&#xe770;"},
@@ -25,20 +27,33 @@ def initment():
             icon=item['icon']
         )
     submain_list = [
+        ## 资产管理
         {'title': '资产列表', 'icon': "&#xe60a;", 'parent_title': '资产管理'},
         {'title': '资产审批', 'icon': "&#xe60b;", 'parent_title': '资产管理'},
         {'title': '交接审批', 'icon': "&#xe607;", 'parent_title': '资产管理'},
 
+        ## 网络映射
         {'title': '映射列表', 'icon': "&#xe60a;", 'parent_title': '网络映射'},
 
+        ## 漏洞管理
         {'title': '漏洞列表', 'icon': "&#xe756;", 'parent_title': '漏洞管理'},
         {'title': '漏洞库', 'icon': "&#xe656;", 'parent_title': '漏洞管理'},
 
+        ## 微信公众号
+        {'title': '公众号列表', 'icon': '&#xe608;', 'parent_title': '微信监控'},
+        {'title': '公众号审查', 'icon': '&#xe63c;', 'parent_title': '微信监控'},
+        ## 新浪微博
+        {'title': '微博列表', 'icon': '&#xe608;', 'parent_title': '微博监控'},
+        {'title': '微博审查', 'icon': '&#xe63c;', 'parent_title': '微博监控'},
+
+        ## 任务管理
         {'title': '任务列表', 'icon': "&#xe60a;", 'parent_title': '任务管理'},
         {'title': '任务审批', 'icon': "&#xe60b;", 'parent_title': '任务管理'},
 
+        ## 报表管理
         {'title': '基础报表', 'icon': "&#xe654;", 'parent_title': '报表中心'},
 
+        ## 用户管理
         {'title': '用户列表', 'icon': "&#xe60a;", 'parent_title': '用户管理'},
         {'title': '用户审批', 'icon': "&#xe60b;", 'parent_title': '用户管理'},
     ]
@@ -63,6 +78,12 @@ def initment():
         {'title': '漏洞列表', 'url': '/vuln/user/', 'is_menu': True, 'menu_title': '漏洞列表'},
         {'title': '漏洞库', 'url': '/vuln/cnvd/', 'is_menu': True, 'menu_title': '漏洞库'},
 
+        {'title': '公众号列表', 'url': '/wxlist/', 'is_menu': True, 'menu_title': '公众号列表'},
+        {'title': '公众号审查', 'url': '/wxcheck/', 'is_menu': False, 'menu_title': '公众号审查'},
+
+        {'title': '微博列表', 'url': '/wblist/', 'is_menu': True, 'menu_title': '微博列表'},
+        {'title': '微博审查', 'url': '/wbcheck/', 'is_menu': False, 'menu_title': '微博审查'},
+
         {'title': '任务列表', 'url': '/task/user/', 'is_menu': True, 'menu_title': '任务列表'},
         {'title': '任务审批', 'url': '/task/request/', 'is_menu': True, 'menu_title': '任务审批'},
         {'title': '扫描同步', 'url': '/task/manage/', 'is_menu': False},
@@ -82,6 +103,7 @@ def initment():
         if item['is_menu']:
             permission.menu = models.Menu.objects.filter(title=item['menu_title']).first()
             permission.save()
+    print('initrole ok')
 
 # 初始化区域
 def initarea():
@@ -112,6 +134,10 @@ def initrole():
         {'title': '安全管理员', 'permissions': '漏洞操作'},
         {'title': '安全管理员', 'permissions': '漏洞列表'},
         {'title': '安全管理员', 'permissions': '漏洞库'},
+        {'title': '安全管理员', 'permissions': '公众号列表'},
+        {'title': '安全管理员', 'permissions': '公众号审查'},
+        {'title': '安全管理员', 'permissions': '微博列表'},
+        {'title': '安全管理员', 'permissions': '微博审查'},
         {'title': '安全管理员', 'permissions': '任务列表'},
         {'title': '安全管理员', 'permissions': '任务审批'},
         {'title': '安全管理员', 'permissions': '扫描同步'},
