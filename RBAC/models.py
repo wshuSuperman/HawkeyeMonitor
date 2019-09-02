@@ -17,6 +17,9 @@ class Menu(models.Model):
     title = models.CharField(u'菜单标题', max_length=25, unique=True)
     icon = models.CharField(u'菜单图标', max_length=50)
     parent = models.ForeignKey('self', verbose_name=u'父菜单', related_name='menu_menu', null=True, blank=True, on_delete=models.CASCADE)
+    class Meta:
+        verbose_name_plural = '菜单'
+
     def __str__(self):
         # 显示层级菜单
         title_list = [self.title]
@@ -36,7 +39,8 @@ class Permission(models.Model):
     is_menu = models.BooleanField('菜单显示', default=False)
     url = models.CharField(max_length=128)
     menu = models.ForeignKey(Menu, null=True, verbose_name=u'权限菜单', related_name='permission_menu', on_delete=models.CASCADE)
-
+    class Meta:
+        verbose_name_plural = '权限'
     def __str__(self):
         return '{menu}--{permission}'.format(menu=self.menu, permission=self.title)
 
@@ -47,6 +51,8 @@ class Role(models.Model):
     """
     title = models.CharField(u'角色名称', max_length=25, unique=True)
     permissions = models.ManyToManyField(Permission, verbose_name=u'权限菜单', related_name='role_permission')
+    class Meta:
+        verbose_name_plural = '角色'
 
     def __str__(self):
         return self.title
@@ -55,6 +61,9 @@ class Role(models.Model):
 class Area(models.Model):
     name = models.CharField('属地信息', max_length=90, unique=True)
     parent = models.ForeignKey('self', verbose_name='父级属地', related_name='assetarea_area', null=True, blank=True, on_delete=models.CASCADE)
+    class Meta:
+        verbose_name_plural = '属地'
+
     def __str__(self):
         # 显示层级菜单
         title_list = [self.name]
@@ -84,6 +93,9 @@ class UserRequest(models.Model):
     area = models.ForeignKey(Area, verbose_name='所属区域', related_name='userrequest_area', null=True,
                              on_delete=models.CASCADE, limit_choices_to={'parent__isnull': True})
     action_user = models.ForeignKey(User, related_name='regist_for_actionuser', on_delete=models.CASCADE, null=True)
+
+    class Meta:
+        verbose_name_plural = '注册审批'
 
     def __str__(self):
         return self.email
@@ -117,6 +129,9 @@ class Profile(models.Model):
                              limit_choices_to={'parent__isnull': True})
 
     roles = models.ManyToManyField(Role, verbose_name=u'所属角色', related_name='user_role')
+
+    class Meta:
+        verbose_name_plural = '用户'
 
     def __str__(self):
         return self.user.username

@@ -1,3 +1,9 @@
+/**
+ *  xadmin.js file
+ *  modify date: 2019.8.19
+ *  @Author: wshu
+ * */
+
 $(function () {
     //加载弹出层
     layui.use(['form','element'],
@@ -11,7 +17,7 @@ $(function () {
         tabAdd: function(title,url,id){
           //新增一个Tab项
           element.tabAdd('xbs_tab', {
-            title: title 
+            title: title
             ,content: '<iframe tab-id="'+id+'" frameborder="0" src="'+url+'" scrolling="yes" class="x-iframe"></iframe>'
             ,id: id
           })
@@ -19,8 +25,8 @@ $(function () {
         ,tabDelete: function(othis){
           //删除指定Tab项
           element.tabDelete('xbs_tab', '44'); //删除：“商品管理”
-          
-          
+
+
           othis.addClass('layui-btn-disabled');
         }
         ,tabChange: function(id){
@@ -44,7 +50,7 @@ $(function () {
                         $(".layui-form-checkbox").addClass('layui-form-checked');
                     }
                 }
-                
+
             });
         },
         getData:function  () {
@@ -59,7 +65,7 @@ $(function () {
 
     //开启表格多选
     tableCheck.init();
-      
+
 
     $('.container .left_open i').click(function(event) {
         if($('.left-nav').css('left')=='0px'){
@@ -85,26 +91,6 @@ $(function () {
     $('.layui-tab-close').click(function(event) {
         $('.layui-tab-title li').eq(0).find('i').remove();
     });
-
-   $("tbody.x-cate tr[fid!='0']").hide();
-    // 栏目多级显示效果
-    $('.x-show').click(function () {
-        if($(this).attr('status')=='true'){
-            $(this).html('&#xe625;'); 
-            $(this).attr('status','false');
-            cateId = $(this).parents('tr').attr('cate-id');
-            $("tbody tr[fid="+cateId+"]").show();
-       }else{
-            cateIds = [];
-            $(this).html('&#xe623;');
-            $(this).attr('status','true');
-            cateId = $(this).parents('tr').attr('cate-id');
-            getCateId(cateId);
-            for (var i in cateIds) {
-                $("tbody tr[cate-id="+cateIds[i]+"]").hide().find('.x-show').html('&#xe623;').attr('status','true');
-            }
-       }
-    })
 
     //左侧菜单效果
     // $('#content').bind("click",function(event){
@@ -137,25 +123,32 @@ $(function () {
                     return;
                 }
             };
-            
+
             tab.tabAdd(title,url,index+1);
             tab.tabChange(index+1);
         }
-        
+
         event.stopPropagation();
-         
-    })
-    
-})
-var cateIds = [];
-function getCateId(cateId) {
-    
-    $("tbody tr[fid="+cateId+"]").each(function(index, el) {
-        id = $(el).attr('cate-id');
-        cateIds.push(id);
-        getCateId(id);
+
     });
-}
+    $('.tab_add').click(function (event) {
+        var url = $(this).attr('_href');
+        var title = '消息通知'
+        var index  = $('.tab_add').index($(this));
+
+        for (var i = 0; i <$('.x-iframe').length; i++) {
+            if($('.x-iframe').eq(i).attr('tab-id')==index+1){
+                tab.tabChange(index+1);
+                event.stopPropagation();
+                return;
+            }
+        };
+
+        tab.tabAdd(title,url,index+1);
+        tab.tabChange(index+1);
+
+    });
+})
 
 /*弹出层*/
 /*
@@ -196,5 +189,3 @@ function x_admin_close(){
     var index = parent.layer.getFrameIndex(window.name);
     parent.layer.close(index);
 }
-
-

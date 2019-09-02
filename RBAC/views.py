@@ -2,38 +2,43 @@
 # -*-coding:utf-8 -*-
 # @Time : 2018/7/15 14:59
 # @Auther : Wshu
-
-from django.shortcuts import render, HttpResponseRedirect, get_object_or_404
-
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_protect
-from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.hashers import make_password
-from SysconfManage.views import strtopsd
-from SysconfManage.SmallFun.checkpsd import checkpsd
-from SysconfManage.SmallFun import mails
+import datetime
 from . import forms, models
-import django.utils.timezone as timezone
+from django.views.decorators.csrf import csrf_protect
 from django.contrib import auth
-import datetime, hashlib
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, HttpResponseRedirect, get_list_or_404, get_object_or_404
+from django.http import JsonResponse
+from django.utils import timezone
+from .service.init_permission import init_permission
+from SysconfManage.commFunc.checkpsd import checkpsd
+from SysconfManage.views import paging, strtopsd
 
-### 仪表盘
+
+################################
+# 仪表盘
+################################
 @login_required
 def dashboard(request):
     return render(request, 'Dashboard.html')
 
-
-### 首页
+################################
+# 首页
+################################
 @login_required
 def index(request):
     return render(request, 'RBAC/index.html')
 
 
-### 登录
+################################
+# 登录
+################################
+@csrf_protect
 def login(request):
     error = ''
-    if request.method == "POST":
+    if request.method == 'POST':
         form = forms.SigninForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
@@ -41,36 +46,40 @@ def login(request):
             user_get = User.objects.filter(username=username).first()
             if user_get:
                 if user_get.profile.lock_time > timezone.now():
-                    error = u'账号已锁定,' + str(user_get.profile.lock_time.strftime("%Y-%m-%d %H:%M")) + '后可尝试'
+                    err = u'账号已锁定,' + str(user_get.profile.lock_time.strftime("%Y-%m-%d %H:M%")) + '后尝试重新登录'
                 else:
-                    user = auth.authenticate(username=username, password=password)
+                    user = authenticate(username=username, password=password)
                     if user:
                         user.profile.error_count = 0
                         user.save()
                         auth.login(request, user)
-                        # 初始化权限
+
+                        # 调用init_permission 进行权限初始化(补充说明: 因为扩展默认User表,所以初始化权限时需要传入 user.profile)
+                        init_permission(request, user.profile)
                         return HttpResponseRedirect('/user/')
                     else:
-                        user_get.profile.error_cout += 1
-                        if user_get.profile.error_cout >= 5:
-                            user_get.profile.error_cout = 0
+                        user_get.profile.error_count += 1
+                        if user_get.profile.error_count >= 10:
                             user_get.profile.lock_time = timezone.now() + datetime.timedelta(minutes=10)
-                        user_get.save()
-                        error = '登陆失败,已错误登录'+str(user_get.profile.error_count) +'次,5次后账号锁定',
+                        # user_get.save()
+                        error = '登录失败,累积错误登录'+ str(user_get.profile.error_count) + '次,10次后账号锁定'
             else:
-                error = '请检查用户信息'
+                error = u"登录失败,仔细检查哦"
         else:
-            error = u'请检查输入'
-        return render(request,'RBAC/login.html',{'form':form,'error':error})
+            error = u'请检查输入信息是否正确'
+        return render(request, 'RBAC/login.html', {'form':form, 'error':error})
     else:
         if request.user.is_authenticated:
             return HttpResponseRedirect('/user/')
         else:
             form = forms.SigninForm()
-    return render(request, 'RBAC/login.html', {'form': form})
+    return render(request, 'RBAC/login.html', {'form':form})
 
 
-### 用户注册
+
+################################
+# 注册
+################################
 @csrf_protect
 def regist(request, argu):
     error = ''
@@ -136,7 +145,9 @@ def regist(request, argu):
                 form = forms.ResetpsdForm()
             return render(request, 'RBAC/')
 
-### zhuce
+################################
+# 找回密码
+################################
 @csrf_protect
 def resetpasswd(request, argu='resetpsd'):
     error = ''
@@ -202,7 +213,9 @@ def resetpasswd(request, argu='resetpsd'):
 
 
 
-### 退出用户
+################################
+# 登出
+################################
 @login_required
 def logout(request):
     auth.logout(request)
@@ -211,13 +224,15 @@ def logout(request):
 
 
 
-### 更改密码
+################################
+## 修改密码
+################################
 @login_required
 @csrf_protect
 def changepwd(request):
     error = ''
     if request.method == 'POST':
-        form = forms.ChangPasswdForm(request.POST)
+        form = forms.ChangePwdForm()
         if form.is_valid():
             old_password = form.cleaned_data['old_password']
             new_password = form.cleaned_data['new_password']
@@ -235,19 +250,20 @@ def changepwd(request):
                         else:
                             error = '账号信息错误'
                     else:
-                        error = '请检查原始密码'
+                        error = '请检查原密码'
                 else:
-                    error = '两次密码不一致'
+                    error = '两次输入的密码不一致,请自己确认检查'
             else:
-                error = '密码必须6位以上且包含字母、数字'
+                error = '密码必须在6位以上,并且包含数字,字母!'
         else:
             error = '请检查输入'
-        return render(request, 'formedit.html', {'form': form, 'post_url': changepwd, 'error':error})
+        return render(request, 'formEdit.html', {'form':form, 'post_url': 'changepwd', 'error':error})
     else:
-        form = forms.ChangPasswdForm()
-    return render(request, 'formedit.html', {'form': form, 'post_url': changepwd})
-
-### 用户列表
+        form = forms.ChangePwdForm()
+        return render(request, 'formEdit.html', {'form':form, 'post_url': 'changepwd'})
+################################
+# 用户列表
+################################
 @login_required
 @csrf_protect
 def userlist(request):
@@ -256,12 +272,14 @@ def userlist(request):
     if user.is_superuser:
         area = models.Area.objects.filter(parent__isnull=True)
         city = models.Area.objects.filter(parent__isnull=False)
-        return render(request, 'RBAC/userlist.html', {'area': area, 'city': city})
+        return render(request, 'RBAC/userList.html', {'area': area, 'city': city})
     else:
         error = '权限错误'
     return render(request, 'error.html', {'error':error})
 
-### 用户提交注册处理
+################################
+# 提交注册
+################################
 @login_required
 @csrf_protect
 def userregistaction(request):
@@ -296,7 +314,9 @@ def userregistaction(request):
         error = '权限错误'
     return JsonResponse({'error': error})
 
-### 注册用户列表
+################################
+# 注册用户列表
+################################
 @login_required
 def userregistlist(request):
     user = request.user
@@ -309,7 +329,9 @@ def userregistlist(request):
     return render(request, 'error.html', {'error': error})
 
 
-### 添加用户
+################################
+# 添加用户
+################################
 @login_required
 @csrf_protect
 def user_add(request):
@@ -351,5 +373,39 @@ def user_add(request):
             form = forms.RegistForm()
     else:
         error = '请检查权限是否正确'
-    return render(request, 'formedit.html', {'form': form, 'error': error})
+    return render(request, 'formEdit.html', {'form': form, 'error': error})
 
+################################
+## 用户资料
+################################
+
+@login_required
+def userinfo(request):
+    return render(request, 'RBAC/userInfo.html')
+
+################################
+## 修改资料
+################################
+@login_required
+@csrf_protect
+def changeuserinfo(request):
+    user = request.user
+    error = ''
+    if request.method == 'POST':
+        form = forms.UserInfoForm(instance=user.profile)
+        if form.is_valid():
+            if 'parent_email' in form.changed_data:
+                parent_email = form.cleaned_data['parent_email']
+                parent_user = User.objects.filter(email=parent_email).first()
+                if parent_user:
+                    user.profile.parent = parent_user
+                    user.save()
+            form.save()
+            error = '修改成功'
+        else:
+
+            error = '修改失败'
+        return render(request, 'formEdit.html', {'form':form, 'post_url': 'changeuserinfo', 'error':error})
+    else:
+        form = forms.UserInfoForm(instance=user.profile)
+        return render(request, 'formEdit.html', {'form':form, 'post_url': 'changeuserinfo'})

@@ -30,12 +30,16 @@ class RbacMiddleware(MiddlewareMixin):
         request_url = request.path_info
         permission_url = request.session.get(settings.SESSION_PERMISSION_URL_KEY)
         # 如果请求url在白名单，放行
+        for url in settings.SAFE_URL:
+            if re.match(url, request_url):
+                return None
+
         if request_url =='/':
             if request.user.is_authenticated:
                 return HttpResponseRedirect('/user/')
             else:
                 return HttpResponseRedirect('/welcome/')
-        elif re.match('/admin/', request_url):
+        elif re.match('/hawkeye/', request_url):
             if request.user.is_authenticated:
                 if request.user.is_superuser:
                     return None
@@ -44,14 +48,14 @@ class RbacMiddleware(MiddlewareMixin):
                     return render(request,'error.html', {'error': error})
             else:
                 return HttpResponseRedirect('/welcome/')
-        elif re.match('/uploads/imgs/', request_url):
-            return None
-        elif re.match('/uploads/files/', request_url):
-            if request.user.is_superuser:
-                return None
-            else:
-                error ='权限错误'
-                return render(request,'error.html',{'error':error})
+        # elif re.match('/uploads/imgs/', request_url):
+        #     return None
+        # elif re.match('/uploads/files/', request_url):
+        #     if request.user.is_superuser:
+        #         return None
+        #     else:
+        #         error ='权限错误'
+        #         return render(request,'error.html',{'error':error})
         # elif re.match('/uploads/assetfiles/', request_url):
         #     url_get = File.objects.filter(asset__asset_user=request.user,file=request_url)
         #     if url_get:
@@ -62,10 +66,6 @@ class RbacMiddleware(MiddlewareMixin):
         #         else:
         #             error ='权限错误'
         #             return render(request,'error.html',{'error':error})
-        else:
-            for url in settings.SAFE_URL:
-                if re.match(url, request_url):
-                    return None
 
         # 如果未取到permission_url, 重定向至登录；为了可移植性，将登录url写入配置
         if not permission_url:

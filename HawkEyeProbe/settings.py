@@ -32,6 +32,7 @@ SAFE_URL =[
     r'/welcome/',
     '/user/',
     '/hawkeye/',
+    '/notice/',
 ]
 # 设置网站根地址
 WEB_URL = 'http://localhost:8000'
@@ -82,6 +83,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'RBAC',
+    'NoticeManage',
 ]
 
 MIDDLEWARE = [

@@ -12,10 +12,11 @@ def initment():
     from RBAC import models
     menu_list = [
                 {'title': '资产管理', 'icon': "&#xe653;"},
+                {'title': '网络映射', 'icon': "&#xe674;"},
                 {'title': '漏洞管理', 'icon': "&#xe663;"},
                 {'title': '任务管理', 'icon': "&#xe628;"},
-                {'title': '报表管理', 'icon': "&#xe629;"},
-                {'title': '系统配置', 'icon': "&#xe770;"},
+                {'title': '报表中心', 'icon': "&#xe629;"},
+                {'title': '用户管理', 'icon': "&#xe770;"},
     ]
 
     for item in menu_list:
@@ -24,6 +25,8 @@ def initment():
             icon=item['icon']
         )
     submain_list = [
+        {'title': '资产列表', 'icon': "&#xe60a;", 'parent_title': '资产管理'},
+        {'title': '资产审批', 'icon': "&#xe60a;", 'parent_title': '资产管理'},
         {'title': '资产列表', 'icon': "&#xe60a;", 'parent_title': '资产管理'},
 
         {'title': '漏洞列表', 'icon': "&#xe756;", 'parent_title': '漏洞管理'},

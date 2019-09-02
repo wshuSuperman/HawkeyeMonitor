@@ -49,7 +49,23 @@ class ResetpsdForm(forms.Form):
 
 
 # 更改密码表单
-class ChangPasswdForm(forms.Form):
+class ChangePwdForm(forms.Form):
     old_password = forms.CharField(label='原密码', max_length=25,widget=forms.PasswordInput(attrs={'class': 'layui-input', 'placeholder': '原密码'}))
     new_password = forms.CharField(label='新密码', max_length=25,widget=forms.PasswordInput(attrs={'class': 'layui-input', 'placeholder': '新密码'}))
     re_new_password = forms.CharField(label='新密码', max_length=25, widget=forms.PasswordInput(attrs={'class': 'layui-input', 'placeholder': '新密码'}))
+
+# 修改资料表单
+## 修改资料
+class UserInfoForm(ModelForm):
+    class Meta:
+        model = models.Profile
+        fields = ['user_num', 'area', 'title', 'parent_email', 'telephone', 'mobilephone', 'description']
+        widgets = {
+            'user_num': widgets.TextInput(attrs={'class':'layui-input', 'placeholder':'编号'}),
+            'area': widgets.Select(attrs={'class':'layui-input', 'placeholder':'所属区域'}),
+            'title': widgets.TextInput(attrs={'class':'layui-input', 'placeholder':'职位信息'}),
+            'parent_email': widgets.TextInput(attrs={'class':'layui-input', 'placeholder':'直属领导邮箱'}),
+            'telephone': widgets.TextInput(attrs={'class':'layui-input', 'placeholder':'联系电话'}),
+            'mobilephone': widgets.TextInput(attrs={'class':'layui-input', 'placeholder':'个人手机', 'lay-verify':'phone', 'autocomplete':'off', 'type':'tel'}),
+            'description': widgets.Textarea(attrs={'class':'layui-textarea', 'placeholder':'员工介绍'}),
+        }

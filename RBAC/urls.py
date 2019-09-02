@@ -18,8 +18,10 @@ urlpatterns = [
     ###user###
     path('user/', views.dashboard, name="dashboard"),
     path('user/index', views.index, name="index"),
-    path('user/logout', views.logout, name="logout"),
     path('user/changepwd', views.changepwd, name="changepwd"),
+    path('user/info/', views.userinfo, name='userinfo'),
+    path('user/changeinfo', views.changeuserinfo, name='changeuserinfo'),
+    path('user/logout', views.logout, name="logout"),
     ###manage###
     path('manage/user/', views.userlist, name="userview"),
     path('manage/user/add/', views.user_add, name="useradd"),

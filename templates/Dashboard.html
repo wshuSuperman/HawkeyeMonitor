@@ -19,34 +19,55 @@
     <script type="text/javascript" src="{% static 'js/jquery/jquery-3.3.1.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'lib/layui/layui.js' %}" charset="utf-8"></script>
     <script type="text/javascript" src="{% static 'js/xadmin.js' %}"></script>
+
+
+    <script>
+        function noticecount() {
+            $.get("{% url 'noticecount' %}", function(res){
+                if(res.notice_count != 0){
+                    $("#noticecount").append("<span class='layui-badge'>" + res.notice_count + "</span>")
+                }
+            })
+        }
+        $(document).ready(function () {
+            noticecount();
+            setInterval(function () {
+                noticecount();
+            }, 6000);
+            $("#noticecount").click(function () {
+                $("#noticecount span").remove();
+            });
+        });
+    </script>
 </head>
 
 <body>
     <!-- 顶部开始 -->
     <div class="container">
-        <div class="logo"><a href="master.html">X-admin v2.0</a></div>
+        <div class="logo"><a href="master.html">HawkEye预警平台 v1.0</a></div>
         <div class="left_open">
             <i title="展开左侧栏" class="iconfont">&#xe699;</i>
         </div>
-        <ul class="layui-nav left fast-add" lay-filter="">
-          <li class="layui-nav-item">
-            <a href="javascript:;">+新增</a>
-            <dl class="layui-nav-child"> <!-- 二级菜单 -->
-              <dd><a onclick="x_admin_show('资讯','http://www.baidu.com')"><i class="iconfont">&#xe6a2;</i>资讯</a></dd>
-              <dd><a onclick="x_admin_show('图片','http://www.baidu.com')"><i class="iconfont">&#xe6a8;</i>图片</a></dd>
-               <dd><a onclick="x_admin_show('用户','http://www.baidu.com')"><i class="iconfont">&#xe6b8;</i>用户</a></dd>
-            </dl>
-          </li>
+        <!-- 增加通知模块 -->
+        <ul class="layui-nav left" lay-filter="">
+            <li class="layui-nav-item">
+                <a _href="{% url 'noticeview' %}" class='tab_add' id='noticecount'>
+                    <i class="layui-icon layui-icon-notice"></i>
+{#                        <span class="layui-badge">66+</span>#}
+                </a>
+            </li>
         </ul>
+        <!-- notice end -->
         <ul class="layui-nav right" lay-filter="">
           <li class="layui-nav-item">
-            <a href="javascript:;">admin</a>
+            <a href="javascript:;">
+                {{ user }}
+            </a>
             <dl class="layui-nav-child"> <!-- 二级菜单 -->
-              <dd><a onclick="x_admin_show('个人信息','http://www.baidu.com')">个人信息</a></dd>
-              <dd><a onclick="x_admin_show('切换帐号','http://www.baidu.com')">切换帐号</a></dd>
-
-              <dd><a onclick="x_admin_show('更改密码','')">更改密码</a></dd>
-              <dd><a href="{% url 'logout' %}">退出登录</a></dd>
+                <dd><a onclick="x_admin_show('基本信息','{% url 'userinfo' %}')">基本信息</a></dd>
+                <dd><a onclick="x_admin_show('信息变更','{% url 'changeuserinfo' %}')">信息变更</a></dd>
+                <dd><a onclick="x_admin_show('更改密码','{% url 'changepwd' %}')">更改密码</a></dd>
+                <dd><a href="{% url 'logout' %}">退出登录</a></dd>
             </dl>
           </li>
         </ul>
