@@ -26,18 +26,21 @@ def initment():
         )
     submain_list = [
         {'title': '资产列表', 'icon': "&#xe60a;", 'parent_title': '资产管理'},
-        {'title': '资产审批', 'icon': "&#xe60a;", 'parent_title': '资产管理'},
-        {'title': '资产列表', 'icon': "&#xe60a;", 'parent_title': '资产管理'},
+        {'title': '资产审批', 'icon': "&#xe60b;", 'parent_title': '资产管理'},
+        {'title': '交接审批', 'icon': "&#xe607;", 'parent_title': '资产管理'},
+
+        {'title': '映射列表', 'icon': "&#xe60a;", 'parent_title': '网络映射'},
 
         {'title': '漏洞列表', 'icon': "&#xe756;", 'parent_title': '漏洞管理'},
-
         {'title': '漏洞库', 'icon': "&#xe656;", 'parent_title': '漏洞管理'},
 
         {'title': '任务列表', 'icon': "&#xe60a;", 'parent_title': '任务管理'},
+        {'title': '任务审批', 'icon': "&#xe60b;", 'parent_title': '任务管理'},
 
-        {'title': '基础报表', 'icon': "&#xe629;", 'parent_title': '报表中心'},
+        {'title': '基础报表', 'icon': "&#xe654;", 'parent_title': '报表中心'},
 
         {'title': '用户列表', 'icon': "&#xe60a;", 'parent_title': '用户管理'},
+        {'title': '用户审批', 'icon': "&#xe60b;", 'parent_title': '用户管理'},
     ]
 
     for item in submain_list:
@@ -50,17 +53,24 @@ def initment():
 
     permission_list = [
         {'title': '资产列表', 'url': '/asset/user/', 'is_menu': True, 'menu_title': '资产列表'},
+        {'title': '资产审批', 'url': '/asset/request/', 'is_menu': True, 'menu_title': '资产审批'},
+        {'title': '交接审批', 'url': '/asset/handover/', 'is_menu': True, 'menu_title': '交接审批'},
+        {'title': '资产指定', 'url': '/asset/manage/', 'is_menu': False},
+
+        {'title': '映射列表', 'url': '/mapped/', 'is_menu': True, 'menu_title': '映射列表'},
 
         {'title': '漏洞操作', 'url': '/vuln/manage/', 'is_menu': False},
         {'title': '漏洞列表', 'url': '/vuln/user/', 'is_menu': True, 'menu_title': '漏洞列表'},
         {'title': '漏洞库', 'url': '/vuln/cnvd/', 'is_menu': True, 'menu_title': '漏洞库'},
 
         {'title': '任务列表', 'url': '/task/user/', 'is_menu': True, 'menu_title': '任务列表'},
+        {'title': '任务审批', 'url': '/task/request/', 'is_menu': True, 'menu_title': '任务审批'},
         {'title': '扫描同步', 'url': '/task/manage/', 'is_menu': False},
 
         {'title': '基础报表', 'url': '/chart/', 'is_menu': True, 'menu_title': '基础报表'},
 
         {'title': '用户列表', 'url': '/manage/user/', 'is_menu': True, 'menu_title': '用户列表'},
+        {'title': '用户审批', 'url': '/manage/userrequest/', 'is_menu': True, 'menu_title': '用户审批'},
 
     ]
     for item in permission_list:
@@ -95,13 +105,19 @@ def initrole():
     from RBAC.models import Role, Permission
     permissions_list = [
         {'title': '安全管理员', 'permissions': '资产列表'},
+        {'title': '安全管理员', 'permissions': '资产审批'},
+        {'title': '安全管理员', 'permissions': '交接审批'},
+        {'title': '安全管理员', 'permissions': '资产指定'},
+        {'title': '安全管理员', 'permissions': '映射列表'},
         {'title': '安全管理员', 'permissions': '漏洞操作'},
         {'title': '安全管理员', 'permissions': '漏洞列表'},
         {'title': '安全管理员', 'permissions': '漏洞库'},
         {'title': '安全管理员', 'permissions': '任务列表'},
+        {'title': '安全管理员', 'permissions': '任务审批'},
         {'title': '安全管理员', 'permissions': '扫描同步'},
         {'title': '安全管理员', 'permissions': '基础报表'},
         {'title': '安全管理员', 'permissions': '用户列表'},
+        {'title': '安全管理员', 'permissions': '用户审批'},
 
         {'title': '运维管理员', 'permissions': '资产列表'},
         {'title': '运维管理员', 'permissions': '漏洞列表'},
@@ -144,6 +160,6 @@ def initsuperuser():
 
 if __name__ == '__main__':
     initment()
-    initarea()
+    # initarea()
     initrole()
-    initsuperuser()
+    # initsuperuser()
